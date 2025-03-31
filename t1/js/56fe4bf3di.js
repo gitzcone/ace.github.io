@@ -1,7 +1,7 @@
     // Lista de IDs de botones y sus sufijos únicos
     const buttons = [
-        { id: "button1", suffix: "R7RFUIFX" },
-        { id: "button2", suffix: "SGDBBHCC" },
+        { id: "button1", suffix: "VVFSF6NM" },
+        { id: "button2", suffix: "MPSGGKG4" },
         { id: "button3", suffix: "1SD17FUB" },
         { id: "button4", suffix: "388BITA5" },
         { id: "button5", suffix: "SRAQSUNN" },
