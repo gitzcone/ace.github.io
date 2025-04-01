@@ -1,0 +1,265 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap');
+
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Resto de tu CSS aquí */
+.inner-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0; /* Oculta el botón ETH visualmente */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el área de ETH */
+}
+
+.container {
+    width: 100%;
+    height: 65%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Alinea la interfaz de pago en la parte inferior */
+    padding-bottom: 20vh; /* Espacio adicional en la parte inferior para centrar */
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between; /* Alinea los elementos horizontalmente */
+    margin-top: 10px; /* Ajusta el margen superior */
+}
+
+.buttons button {
+    background: linear-gradient(90deg, rgba(74, 74, 75, 0.8) 0%, rgba(26, 21, 23, 0.8) 100%);
+    border: none;
+    padding: 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    color: white; /* Añadir color de texto blanco */
+    width: 100%; /* Ancho igual para ambos botones */
+    height: 40px; /* Altura igual para ambos botones */
+}
+
+.buttons button.connect-wallet {
+    margin-right: 5px; /* Ajusta el margen derecho del botón Connect Wallet */
+}
+
+.buttons button.buy-with-bnb {
+    margin-left: 5px; /* Ajusta el margen izquierdo del botón Buy with BNB */
+}
+
+.purchase-interface {
+    background: linear-gradient(90deg,rgba(70, 70, 71, 0.8) 0%,rgba(14, 11, 12, 0.8) 100%),rgba(0,0,0,.5);
+    color: #ffffff;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(155, 116, 116, 0.5);
+    width: 370px;
+    text-align: center;
+}
+
+.header h2 {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+}
+
+.black-input {
+    background-color: rgba(0, 0, 0, 0.3); /* Fondo negro con 50% de transparencia */
+    color: white; /* Texto blanco */
+}
+
+.progress-bar {
+    background-color: #dbdbdb;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.progress {
+    background: linear-gradient(90deg, rgba(17, 187, 39, 0.8) 0%, rgba(0, 92, 38, 0.8) 50%);
+    height: 15px;
+    border-radius: 20px;
+    
+}
+
+.user-info div {
+    margin: 10px 0;
+}
+
+.poweredBy {
+    text-align: center;
+    font-size: 16px;
+    margin-top: 20px;
+    color: rgb(248, 244, 244);
+}
+
+.poweredByIcon {
+    margin-bottom: -5px;
+}
+
+.sold {
+    font-size: 14px;
+}
+
+.price {
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+}
+
+.amount {
+    color: rgb(241, 220, 22);
+    font-weight: bold;
+}
+
+.payment-methods {
+    display: flex;
+    justify-content: space-around;
+    margin: 0px;
+}
+
+.buy-with-bnb .icon,
+.user-info .icon,
+.icon {
+    width: 18px; /* Ajusta el tamaño del icono según sea necesario */
+    margin-right: 0px; /* Ajusta el margen entre el icono y el texto */
+    height: auto;
+}
+
+.icon {
+    width: 28px;
+    height: 28px;
+}
+
+.icon-button.selected {
+    border: 2px solid #ffffff; /* Cambia esto según el estilo deseado */
+}
+#eth-button.selected {
+    border: 2px solid #ffffff; /* Cambia esto según el estilo deseado */
+}
+
+.buy-with-bnb .icon,
+.icon-button .icon,
+.user-info .icon {
+    margin-left: 0px; /* ajusta el espacio entre el texto y el icono según sea necesario */
+}
+
+.icon-button .icon {
+    margin-right: 5px; /* Ajusta el margen entre el icono y el texto */
+}
+
+.icon-button {
+    background-color: rgba(18, 12, 19, 0.5);
+    color: white;
+    border: 0.1px solid white; /* Borde de 2px sólido blanco */
+    padding: 0;
+    cursor: pointer;
+    width: 120px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px; /* Añadir bordes redondeados */
+}
+
+.buttons button.connect-wallet,
+.buttons button.buy-with-bnb {
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+    text-align: center;
+}
+
+.buttons button.connect-wallet {
+    margin-right: 0px; /* Ajusta el margen derecho del botón Connect Wallet */
+}
+
+.buttons button.buy-with-bnb {
+    display: flex; /* Utiliza flexbox para centrar el contenido */
+    align-items: center; /* Alinea verticalmente */
+    justify-content: center; /* Alinea horizontalmente */
+    margin-left: 10px; /* Ajusta el margen izquierdo del botón Buy with BNB */
+}
+
+.payment-methods {
+    display: flex;
+    justify-content: space-between; /* Ajusta el espacio entre los botones */
+    margin: 30px 0; /* Ajusta el margen superior e inferior según sea necesario */
+}
+
+.payment-form {
+    margin: 20px 0 30px; /* Modifica el margen inferior a 30px */
+}
+
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon .icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+}
+
+.input-group {
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    margin: 10px 0; /* Ajusta el margen inferior y superior */
+    display: inline-block;
+    width: 49%; /* Ajusta el ancho para dejar espacio entre los campos */
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    border-radius: 20px;
+    border: 1px solid #ffffff;
+    width: calc(100% - 30px); /* Ajusta el ancho del input para considerar el espacio del icono */
+    padding: 10px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    background-color: #1202a1;
+    border: none;
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 180px;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+}
+
+button:hover {
+    background-color: #7c7b7b;
+}
+
+.footer {
+    margin-top: 20px;
+}
+
+.footer a {
+    color: #ffc107;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}

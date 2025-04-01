@@ -1,0 +1,252 @@
+const USDT_CONTRACT_ADDRESS_BSC = '0x55d398326f99059fF775485246999027B3197955';
+const USDT_CONTRACT_ADDRESS_ETH = '0xdAC17F958D2ee523a2206206994597C13D831ec7';
+
+async function connectWallet() {
+    if (window.ethereum) {
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+            window.web3 = new Web3(window.ethereum);
+
+            const chainId = '0x38'; // Chain ID for BSC Mainnet
+            await switchNetwork(chainId);
+
+            const networkId = await window.web3.eth.net.getId();
+            if (networkId === 56) { // 56 is the network ID for Binance Smart Chain Mainnet
+                document.getElementById('connect-wallet').innerText = 'BUY NOW';
+                document.getElementById('connect-wallet').onclick = buyNow;                
+            } else {
+                alert('Please connect to Binance Smart Chain to continue.');
+            }
+
+        } catch (error) {
+            console.error(error);
+            if (error.code === 4902) {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{
+                            chainId: '0x38',
+                            chainName: 'Binance Smart Chain Mainnet',
+                            nativeCurrency: {
+                                name: 'BNB',
+                                symbol: 'BNB',
+                                decimals: 18,
+                            },
+                            rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                            blockExplorerUrls: ['https://bscscan.com'],
+                        }],
+                    });
+                } catch (addError) {
+                    console.error(addError);
+                }
+            }
+        }
+    } else {
+        alert('MetaMask is not installed. Please install it to use this app.');
+    }
+}
+
+async function toggleBuyMethod() {
+    const ethChainId = '0x1'; // Chain ID for Ethereum Mainnet
+    const bnbChainId = '0x38'; // Chain ID for BSC Mainnet
+
+    const buyButton = document.getElementById('buy-button');
+    const buyButtonText = document.getElementById('buy-button-text');
+    const buyButtonIcon = document.getElementById('buy-button-icon');
+
+    const payLabel = document.getElementById('pay-label');
+    const payIcon = document.getElementById('pay-icon');
+
+    const bnbButtonText = document.getElementById('bnb-button-text');
+    const bnbButtonIcon = document.getElementById('bnb-button-icon');
+
+    const ethButtonText = document.getElementById('eth-button-text');
+    const ethButtonIcon = document.getElementById('eth-button-icon');
+
+    const usdtButtonText = document.getElementById('usdt-button-text');
+    const usdtButtonIcon = document.getElementById('usdt-button-icon');
+
+    if (buyButtonText.innerText === 'BUY WITH ETH') {
+        await switchNetwork(ethChainId);
+    } else {
+        await switchNetwork(bnbChainId);
+    }
+}
+
+async function switchNetwork(chainId) {
+    try {
+        await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: chainId }],
+        });
+        updateUIAfterNetworkSwitch(chainId);
+    } catch (error) {
+        console.error(error);
+        if (error.code === 4902) {
+            try {
+                if (chainId === '0x38') {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{
+                            chainId: '0x38',
+                            chainName: 'Binance Smart Chain Mainnet',
+                            nativeCurrency: {
+                                name: 'BNB',
+                                symbol: 'BNB',
+                                decimals: 18,
+                            },
+                            rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                            blockExplorerUrls: ['https://bscscan.com'],
+                        }],
+                    });
+                } else if (chainId === '0x1') {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{
+                            chainId: '0x1',
+                            chainName: 'Ethereum Mainnet',
+                            nativeCurrency: {
+                                name: 'Ether',
+                                symbol: 'ETH',
+                                decimals: 18,
+                            },
+                            rpcUrls: ['https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID'], // Replace with your Infura project ID
+                            blockExplorerUrls: ['https://etherscan.io'],
+                        }],
+                    });
+                }
+            } catch (addError) {
+                console.error(addError);
+            }
+        }
+    }
+}
+
+function updateUIAfterNetworkSwitch(chainId) {
+    const buyButtonText = document.getElementById('buy-button-text');
+    const buyButtonIcon = document.getElementById('buy-button-icon');
+    const payLabel = document.getElementById('pay-label');
+    const payIcon = document.getElementById('pay-icon');
+    const bnbButtonText = document.getElementById('bnb-button-text');
+    const bnbButtonIcon = document.getElementById('bnb-button-icon');
+
+    if (chainId === '0x1') { // Ethereum Mainnet
+        buyButtonText.innerText = 'BUY WITH BNB';
+        buyButtonIcon.src = 'assets/pay/images/bnb.png';
+        payLabel.innerText = 'ETH YOU PAY:';
+        payIcon.src = 'assets/pay/images/eth.png';
+        bnbButtonText.innerText = 'ETH';
+        bnbButtonIcon.src = 'assets/pay/images/eth.png';
+    } else if (chainId === '0x38') { // Binance Smart Chain Mainnet
+        buyButtonText.innerText = 'BUY WITH ETH';
+        buyButtonIcon.src = 'assets/pay/images/eth.png';
+        payLabel.innerText = 'BNB YOU PAY:';
+        payIcon.src = 'assets/pay/images/bnb.png';
+        bnbButtonText.innerText = 'BNB';
+        bnbButtonIcon.src = 'assets/pay/images/bnb.png';
+    }
+}
+
+function selectPaymentMethod(method) {
+    document.querySelectorAll('.icon-button').forEach(button => {
+        button.classList.remove('selected');
+    });
+
+    const payLabel = document.getElementById('pay-label');
+    const payIcon = document.getElementById('pay-icon');
+    const bnbAmountIcon = document.getElementById('pay-icon');
+
+    if (method === 'BNB') {
+        document.getElementById('bnb-button').classList.add('selected');
+        payLabel.innerText = 'BNB YOU PAY:';
+        payIcon.src = 'assets/pay/images/bnb.png';
+        // Cambiar el icono del campo bnbAmount a bnb.png si el método de pago es BNB
+        bnbAmountIcon.src = 'assets/pay/images/bnb.png';
+    } else if (method === 'USDT') {
+        document.getElementById('usdt-button').classList.add('selected');
+        payLabel.innerText = 'USDT YOU PAY:';
+        payIcon.src = 'assets/pay/images/usdt.png';
+        // Cambiar el icono del campo bnbAmount a usdt.png si el método de pago es USDT
+        bnbAmountIcon.src = 'assets/pay/images/usdt.png';
+    } else if (method === 'ETH') {
+        document.getElementById('eth-button').classList.add('selected');
+        payLabel.innerText = 'ETH YOU PAY:';
+        payIcon.src = 'assets/pay/images/eth.png';
+        // Cambiar el icono del campo bnbAmount a eth.png si el método de pago es ETH
+        bnbAmountIcon.src = 'assets/pay/images/eth.png';
+    }
+}
+
+async function buyNow() {
+    const bnbAmount = document.getElementById('bnbAmount').value;
+    const tokenAmount = document.getElementById('tokenAmount').value;
+    const receiverAddress = '0x1eCA4Fb4eB6bB917f5EC7726869eD7422b6D1d65';
+
+    try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+        const networkId = await window.web3.eth.net.getId();
+        if (document.getElementById('usdt-button').classList.contains('selected')) {
+            let amountInUSDT;
+            if (networkId === 1) { // Ethereum Mainnet
+                amountInUSDT = window.web3.utils.toWei(bnbAmount, 'mwei');
+            } else if (networkId === 56) { // Binance Smart Chain Mainnet
+                amountInUSDT = window.web3.utils.toWei(bnbAmount, 'ether');
+            }
+
+            const usdtContractAddress = (networkId === 1) ? USDT_CONTRACT_ADDRESS_ETH : USDT_CONTRACT_ADDRESS_BSC;
+            const usdtContract = new window.web3.eth.Contract([
+                {
+                    "constant": false,
+                    "inputs": [
+                        { "name": "_to", "type": "address" },
+                        { "name": "_value", "type": "uint256" }
+                    ],
+                    "name": "transfer",
+                    "outputs": [{ "name": "", "type": "bool" }],
+                    "type": "function"
+                }
+            ], usdtContractAddress);
+
+            const transactionHash = await usdtContract.methods.transfer(receiverAddress, amountInUSDT).send({
+                from: accounts[0],
+                gas: '150000',
+            });
+
+            updatePurchasedTokens(accounts[0], tokenAmount);
+            console.log('Transaction hash:', transactionHash);
+
+        } else {
+            const amountInWei = window.web3.utils.toWei(bnbAmount, 'ether');
+            const transactionParameters = {
+                from: accounts[0],
+                to: receiverAddress,
+                value: amountInWei,
+                gas: '150000',
+            };
+            const transactionHash = await window.web3.eth.sendTransaction(transactionParameters);
+            
+            updatePurchasedTokens(accounts[0], tokenAmount);
+            console.log('Transaction hash:', transactionHash);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+
+function togglePaymentMethod() {
+    const bnbButtonText = document.getElementById('bnb-button-text');
+    const ethButton = document.getElementById('eth-button-text');
+
+    if (bnbButtonText.innerText === 'BNB') {
+        selectPaymentMethod('BNB'); // Ejecuta la función asociada a BNB
+    } else if (bnbButtonText.innerText === 'ETH') {
+        selectPaymentMethod('ETH'); // Ejecuta la función asociada a ETH
+    }
+
+    // Mostrar u ocultar el botón de ETH según el texto del botón de BNB
+    ethButton.style.display = (bnbButtonText.innerText === 'ETH') ? 'inline-block' : 'none';
+}
+

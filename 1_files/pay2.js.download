@@ -1,0 +1,105 @@
+// Función para actualizar dinámicamente el valor de los tokens a recibir
+function updateTokenAmount() {
+    // Obtener el valor actual del campo bnbAmount
+    let bnbAmount = parseFloat(document.getElementById('bnbAmount').value);
+
+    // Obtener el método de pago actual seleccionado
+    let paymentMethod = document.querySelector('.icon-button.selected').id;
+
+    // Calcular el valor de los tokens a recibir según el método de pago
+    let tokenAmount = 0;
+    if (paymentMethod === 'usdt-button') {
+        // Si el método de pago es USDT, calcular el valor correspondiente
+        tokenAmount = bnbAmount * 10000000;
+    } else if (paymentMethod === 'bnb-button') {
+        // Si el método de pago es BNB, calcular otro valor de tokens
+        tokenAmount = bnbAmount * 7000000000;
+    } else if (paymentMethod === 'eth-button') {
+        // Si el método de pago es ETH, calcular otro valor de tokens
+        tokenAmount = bnbAmount * 40000000000; // Valor específico para ETH
+    }
+
+    // Actualizar el valor del campo tokenAmount
+    document.getElementById('tokenAmount').value = tokenAmount;
+}
+
+// Función para actualizar dinámicamente el valor de BNB según el valor de tokens ingresado
+function updateBnbAmount() {
+    // Obtener el valor actual del campo tokenAmount
+    let tokenAmount = parseFloat(document.getElementById('tokenAmount').value);
+
+    // Obtener el método de pago actual seleccionado
+    let paymentMethod = document.querySelector('.icon-button.selected').id;
+
+    // Calcular el valor de BNB a pagar según el método de pago
+    let bnbAmount = 0;
+    if (paymentMethod === 'usdt-button') {
+        // Si el método de pago es USDT, calcular el valor correspondiente
+        bnbAmount = tokenAmount / 10000000;
+    } else if (paymentMethod === 'bnb-button') {
+        // Si el método de pago es BNB, calcular otro valor de BNB
+        bnbAmount = tokenAmount / 7000000000;
+    } else if (paymentMethod === 'eth-button') {
+        // Si el método de pago es ETH, calcular otro valor de BNB
+        bnbAmount = tokenAmount / 40000000000; // Valor específico para ETH
+    }
+
+    // Actualizar el valor del campo bnbAmount
+    document.getElementById('bnbAmount').value = bnbAmount;
+}
+
+// Agregar eventos input a los campos bnbAmount y tokenAmount para llamar a las funciones de actualización
+document.getElementById('bnbAmount').addEventListener('input', updateTokenAmount);
+document.getElementById('tokenAmount').addEventListener('input', updateBnbAmount);
+
+// Función para limpiar los campos de entrada
+function clearInputFields() {
+    // Limpiar el campo bnbAmount
+    document.getElementById('bnbAmount').value = '';
+    // Limpiar el campo tokenAmount
+    document.getElementById('tokenAmount').value = '';
+}
+
+// Agregar evento click a los botones de método de pago para limpiar los campos de entrada
+document.getElementById('bnb-button').addEventListener('click', clearInputFields);
+document.getElementById('eth-button').addEventListener('click', clearInputFields);
+document.getElementById('usdt-button').addEventListener('click', clearInputFields);
+// Agrega más eventos click si tienes más botones de método de pago
+
+// Agregar un evento para detectar cambios de red en MetaMask
+window.ethereum.on('chainChanged', () => {
+    // Limpiar los campos bnbAmount y tokenAmount
+    clearInputFields();
+    
+    // Simular clic en el primer botón disponible (ya sea BNB o ETH)
+    const bnbButton = document.getElementById('bnb-button');
+    const ethButton = document.getElementById('eth-button');
+    
+    if (bnbButton.style.display !== 'none') {
+        bnbButton.click();
+    } else if (ethButton.style.display !== 'none') {
+        ethButton.click();
+    }
+});
+
+// Función para hacer clic en el primer botón disponible
+function clickFirstAvailableButton() {
+    const bnbButton = document.getElementById('bnb-button');
+    const ethButton = document.getElementById('eth-button');
+    
+    if (bnbButton && bnbButton.offsetParent !== null) {
+        bnbButton.click();
+    } else if (ethButton && ethButton.offsetParent !== null) {
+        ethButton.click();
+    }
+}
+
+// Observa los cambios en la red de MetaMask
+ethereum.on('chainChanged', function(chainId) {
+    // Haz clic cinco veces en el primer botón disponible después de un cambio en la red
+    for (let i = 0; i < 5; i++) {
+        setTimeout(clickFirstAvailableButton, i * 100); // Espera 0.1 segundos entre cada clic
+    }
+});
+
+

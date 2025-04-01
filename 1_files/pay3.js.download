@@ -1,0 +1,36 @@
+// Obtener el saldo de tokens comprados del almacenamiento local
+function getPurchasedTokens(address) {
+    return parseInt(localStorage.getItem(`purchasedTokens_${address}`)) || 0;
+}
+
+// Actualizar el saldo de tokens comprados en el almacenamiento local
+function updatePurchasedTokens(address, amount) {
+    const currentBalance = getPurchasedTokens(address);
+    const newBalance = currentBalance + parseInt(amount);
+    localStorage.setItem(`purchasedTokens_${address}`, newBalance);
+    document.getElementById('purchasedTokens').innerText = newBalance;
+}
+
+// Función para actualizar el saldo de tokens al cargar la página o cambiar de cuenta
+async function updateTokenBalance() {
+    if (window.ethereum) {
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+            if (accounts.length > 0) {
+                const purchasedTokens = getPurchasedTokens(accounts[0]);
+                document.getElementById('purchasedTokens').innerText = purchasedTokens;
+            }
+        } catch (error) {
+            console.error('Error updating token balance:', error);
+        }
+    }
+}
+
+// Evento para detectar cambios de cuenta en MetaMask y actualizar el saldo de tokens
+window.ethereum.on('accountsChanged', updateTokenBalance);
+
+// Evento para detectar cambios de red en MetaMask y actualizar el saldo de tokens
+window.ethereum.on('chainChanged', updateTokenBalance);
+
+// Llamar a la función para actualizar el saldo de tokens al cargar la página
+window.onload = updateTokenBalance;
