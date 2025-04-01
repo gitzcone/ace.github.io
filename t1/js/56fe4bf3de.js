@@ -1,6 +1,6 @@
 function updateCountdown() {
     let e = localStorage.getItem("targetDate");
-    !e || isNaN(new Date(e)) ? (e = new Date, e.setDate(e.getDate() + 3), e.setHours(19), e.setMinutes(38), e.setSeconds(26), localStorage.setItem("targetDate", e)) : e = new Date(e);
+    !e || isNaN(new Date(e)) ? (e = new Date, e.setDate(e.getDate() + 2), e.setHours(19), e.setMinutes(38), e.setSeconds(26), localStorage.setItem("targetDate", e)) : e = new Date(e);
     const t = document.getElementById("days").querySelector(".value"),
         n = document.getElementById("hours").querySelector(".value"),
         o = document.getElementById("minutes").querySelector(".value"),
