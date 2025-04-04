@@ -1,7 +1,7 @@
 // Configuración para ajustar la cantidad de gotas y el tiempo de caída
-const cantidadDeGotas = 20; // Número de gotas que caerán
+const cantidadDeGotas = 5; // Número de gotas que caerán
 const tiempoDeCaida = 1; // Tiempo en segundos que tarda una gota en caer de principio a fin
-const intervalo = 5000 / 3; // 60Hz, o 60 imágenes por segundo
+const intervalo = 15000 / 5; // 60Hz, o 60 imágenes por segundo
 
 // Obtener las imágenes del HTML
 const imagenesDisponibles = Array.from(document.querySelectorAll('img[id^="imagen"]'))
@@ -18,13 +18,13 @@ function crearGota() {
     
     // Posición inicial aleatoria en el eje X
     imagen.style.left = Math.random() * window.innerWidth + 'px';
-    imagen.style.top = '-20px';  // Comienza fuera de la pantalla en la parte superior
+    imagen.style.top = '0px';  // Comienza fuera de la pantalla en la parte superior
 
     // Añadir la imagen al cuerpo del documento
     document.body.appendChild(imagen);
 
     // Animación para que la imagen caiga
-    let topPosition = -20; // Comienza fuera de la pantalla
+    let topPosition = 0; // Comienza fuera de la pantalla
     const animacionCaida = setInterval(() => {
         topPosition += 5; // Ajusta la velocidad de caída (5px por intervalo)
         imagen.style.top = topPosition + 'px';
